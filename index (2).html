@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nothing [School] Edition</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent: #ff0000; /* Nothing's signature red */
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* The Scrolling Container */
+        .container {
+            height: 500vh; /* This makes the page "longer" */
+            position: relative;
+        }
+
+        /* The Sticky Stage - This stays still while you scroll */
+        .stage {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Dot Grid Background (Very Nothing Style) */
+        .dot-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#333 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        /* Central Image/Object */
+        .main-visual {
+            position: relative;
+            z-index: 2;
+            width: 300px;
+            height: 500px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.1s linear;
+        }
+
+        .dot-logo {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* Text Sections */
+        .section-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            padding: 0 20px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        h2 { font-size: 5rem; letter-spacing: -3px; font-weight: 700; text-transform: uppercase; }
+        p { color: var(--text-dim); font-size: 1.2rem; margin-top: 10px; }
+
+        /* Triggering States via JS */
+        .visible { opacity: 1; transform: translateY(0); }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="bar"></div>
+
+    <div class="container">
+        <div class="stage">
+            <div class="dot-grid"></div>
+
+            <div class="main-visual" id="visual">
+                <div class="dot-logo"></div>
+                <div style="margin-top: 20px; color: #444; font-size: 10px;">SCHOOL.OS (v1.0)</div>
+            </div>
+
+            <div class="section-text" id="text1">
+                <h2>PURE TECH.</h2>
+                <p>Advanced Robotics Lab & AI Curriculum.</p>
+            </div>
+
+            <div class="section-text" id="text2">
+                <h2>NO NOISE.</h2>
+                <p>Focused learning environments and quiet zones.</p>
+            </div>
+
+            <div class="section-text" id="text3">
+                <h2>TRANSPARENT.</h2>
+                <p>A community built on open communication.</p>
+            </div>
+            
+            <div class="section-text" id="text4">
+                <h2>THE FUTURE.</h2>
+                <p>Enrollment open for 2026/27.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const visual = document.getElementById('visual');
+        const bar = document.getElementById('bar');
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+        const text3 = document.getElementById('text3');
+        const text4 = document.getElementById('text4');
+
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
+            const scrollVal = scrollPercent * 100;
+
+            // Update Progress Bar
+            bar.style.width = scrollVal + "%";
+
+            // Rotate and Scale the Visual (Nothing Style)
+            visual.style.transform = `rotateY(${scrollVal * 2}deg) scale(${1 + scrollVal/200})`;
+
+            // Logic for showing text based on scroll position
+            text1.classList.toggle('visible', scrollVal > 10 && scrollVal < 30);
+            text2.classList.toggle('visible', scrollVal > 35 && scrollVal < 55);
+            text3.classList.toggle('visible', scrollVal > 60 && scrollVal < 80);
+            text4.classList.toggle('visible', scrollVal > 85);
+
+            // Zoom the "device" into the screen at the end
+            if(scrollVal > 90) {
+                visual.style.transform = `scale(10) rotateY(0deg)`;
+                visual.style.opacity = '0';
+            } else {
+                visual.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
